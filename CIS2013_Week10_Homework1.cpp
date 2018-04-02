@@ -64,13 +64,10 @@ int main()
 	bool** choices = genChoices(rows, columns);
 	
 	//Print the real map
-	cout << "\t\t\n\n---------" << endl;
 	printReal(rows, columns, map);
-	
+	cout << "\n";
 	//Print the view
-	cout << "\t\t\n\n---------\n\n" << endl;
 	printView(rows, columns, map);
-	cout << "\t\t\n\n---------\n\n" << endl;
 
 	//Create coordinates
 	int x, y;
@@ -112,7 +109,7 @@ char** putMinesOnMap(char **map, int rows, int columns, int numberOfMines)
 		
 		int diceRoll = rng(numberOfTiles) - 1;
 		int j = rng(columns) - 1;
-		if(diceRoll == 0)
+		if(diceRoll == 0 && map[i][j] != 'M')
 		{
 			map[i][j] = 'M';
 			mineCounter++;
@@ -131,7 +128,7 @@ int rng(int max)
 void printView(int rows, int columns, char**map)
 {
 	//Spacing
-	cout << "   ";
+	cout << "     ";
 	for (int i = 0; i < columns; i++) 
 	{
 		//Print the column number
@@ -144,33 +141,36 @@ void printView(int rows, int columns, char**map)
 		}
 	}
 	//Spacing
-	cout << endl << "   ";
+	cout << endl;
+	cout << "    ";
 	//Print a line for the top of the map
-	for (int i = 0; i < (columns*3)-1; i++) 
+	for (int i = 0; i < (columns*3)+1; i++) 
 	{ 
-		cout << "_";
+		cout << "-";
 	}
+	cout << endl;
 	//Print each map row
 	for (int i = 0; i < rows; ++i)
 	{
 		//Print the row number
 		cout << endl << i + 1;
 		if(i<9){cout << " ";}
-		cout << "|";
+		cout << "|  ";
 		for (int j = 0; j < columns; ++j)
 		{
 			//Print the tile and some spaces
-			cout << (char)219 << "  ";
+			cout << '?' << "  ";
 		}
 		//Print the row number again
-		cout << "\b|" << i + 1 << endl;
+		cout << "\b | " << i + 1 << endl;
 	}
 	//Print a new line and some spaces
-	cout << endl << "   ";
-	//Print a line for the bottom of the map
-	for (int i = 0; i < (columns*3)-1; i++) { cout << "_";}
 	cout << endl;
-	cout << "   ";
+	cout << "    ";
+	//Print a line for the bottom of the map
+	for (int i = 0; i < (columns*3)+1; i++) { cout << "-";}
+	cout << endl;
+	cout << "     ";
 	//Print the column numbers again
 	for (int i = 0; i < columns; i++) 
 	{ 
@@ -188,7 +188,7 @@ void printView(int rows, int columns, char**map)
 void printReal(int rows, int columns, char **map)
 {
 	//Spacing
-	cout << "   ";
+	cout << "     ";
 	for (int i = 0; i < columns; i++) 
 	{
 		//Print the column number
@@ -201,33 +201,36 @@ void printReal(int rows, int columns, char **map)
 		}
 	}
 	//Spacing
-	cout << endl << "   ";
+	cout << endl;
+	cout << "    ";
 	//Print a line for the top of the map
-	for (int i = 0; i < (columns*3)-1; i++) 
+	for (int i = 0; i < (columns*3)+1; i++) 
 	{ 
-		cout << "_";
+		cout << "-";
 	}
+	cout << endl;
 	//Print each map row
 	for (int i = 0; i < rows; ++i)
 	{
 		//Print the row number
 		cout << endl << i + 1;
 		if(i<9){cout << " ";}
-		cout << "|";
+		cout << "|  ";
 		for (int j = 0; j < columns; ++j)
 		{
 			//Print the tile and some spaces
 			cout << map[i][j] << "  ";
 		}
 		//Print the row number again
-		cout << "\b|" << i + 1 << endl;
+		cout << "\b | " << i + 1 << endl;
 	}
 	//Print a new line and some spaces
-	cout << endl << "   ";
-	//Print a line for the bottom of the map
-	for (int i = 0; i < (columns*3)-1; i++) { cout << "_";}
 	cout << endl;
-	cout << "   ";
+	cout << "    ";
+	//Print a line for the bottom of the map
+	for (int i = 0; i < (columns*3)+1; i++) { cout << "-";}
+	cout << endl;
+	cout << "     ";
 	//Print the column numbers again
 	for (int i = 0; i < columns; i++) 
 	{ 
