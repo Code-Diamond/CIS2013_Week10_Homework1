@@ -4,12 +4,16 @@
 #include <exception>
 using namespace std;
 
+//Function declarations
 int rng(int);
 void printReal(int, int, char**);
 void printView(int, int, char**);
 char** genMap(int, int);
 bool** genChoices(int, int);
 void deallocateMap(char**, int);
+void deallocateChoices(bool**, int);
+
+
 int main()
 {
 	//Use time as a seed for the rng
@@ -20,7 +24,7 @@ int main()
 	int numberOfMines = -1;
 	bool validate;
 
-
+	//Ask user for input until valid entry for rows, columns and the number of mines
 	while(rows <= 0)
 	{
 		cout << "Enter the number of rows: ", cin >> rows, cout << endl;		
@@ -31,8 +35,6 @@ int main()
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
-
-
 	while(columns <= 0)
 	{
 		cout << "Enter the number of columns: ", cin >> columns, cout << endl;	
@@ -43,7 +45,6 @@ int main()
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
-
 	while(numberOfMines <= 0)
 	{
 		cout << "Enter the number of mines: ", cin >> numberOfMines, cout << endl;		
@@ -54,20 +55,19 @@ int main()
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
-	
 	//Generate the map
 	char** map = genMap(rows, columns);
 	//Generate choices array
 	bool** choices = genChoices(rows, columns);
-
 	//Print the real map
 	cout << "\t\t\n\n---------" << endl;
 	printReal(rows, columns, map);
 	cout << "\t\t\n\n---------\n\n" << endl;
 	printView(rows, columns, map);
 	cout << "\t\t\n\n---------\n\n" << endl;
-
+	//Deallocate the arrays
 	deallocateMap(map, rows);
+	deallocateChoices(choices, rows);
 	return 0;
 }
 
@@ -77,7 +77,7 @@ int rng(int max)
 	int randomN = 1 + rand() % max;
 	return randomN;
 }
-
+//Prints the view for the user
 void printView(int rows, int columns, char**map)
 {
 	//Spacing
@@ -134,7 +134,7 @@ void printView(int rows, int columns, char**map)
 	cout << endl;
 }
 
-//Print the real map
+//Prints the real map for development
 void printReal(int rows, int columns, char **map)
 {
 	//Spacing
@@ -190,6 +190,7 @@ void printReal(int rows, int columns, char **map)
 	}
 	cout << endl;
 }
+//Deallocates the map array
 void deallocateMap(char **map, int rows)
 {
 	try
@@ -199,11 +200,21 @@ void deallocateMap(char **map, int rows)
 	catch(exception e)
 	{
 		//Just do nothing
-	}
-		
-	
+	}	
 }
-
+//Deallocates the choices array
+void deallocateChoices(bool **choices, int rows)
+{
+	try
+	{
+		delete[] choices;
+	}
+	catch(exception e)
+	{
+		//Just do nothing
+	}	
+}
+//Generates the map array
 char** genMap(int rows, int columns)
 {
 	//Allocate a two dimensional row x column array
@@ -224,7 +235,7 @@ char** genMap(int rows, int columns)
 	}
 	return map;
 }
-
+//Generates the choices array
 bool** genChoices(int rows, int columns)
 {
 	//Allocate a two dimensional row x column array
