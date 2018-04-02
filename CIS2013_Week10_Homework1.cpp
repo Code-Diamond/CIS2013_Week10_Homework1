@@ -79,27 +79,57 @@ int rng(int max)
 //Print the real map
 void printReal(int rows, int columns, char **map)
 {
-	//Print array
+	//Spacing
 	cout << "   ";
-	for (int i = 0; i < columns; i++) { if(i<9){cout << i + 1 << "  ";}else{cout << i + 1 << " "; }}
+	for (int i = 0; i < columns; i++) 
+	{
+		//Print the column number
+		if(i<9)
+		{
+			cout << i + 1 << "  ";
+		}else
+		{
+			cout << i + 1 << " "; 
+		}
+	}
+	//Spacing
 	cout << endl << "   ";
-	for (int i = 0; i < (columns*3)-1; i++) { cout << "_";}
+	//Print a line for the top of the map
+	for (int i = 0; i < (columns*3)-1; i++) 
+	{ 
+		cout << "_";
+	}
+	//Print each map row
 	for (int i = 0; i < rows; ++i)
 	{
+		//Print the row number
 		cout << endl << i + 1;
 		if(i<9){cout << " ";}
 		cout << "|";
 		for (int j = 0; j < columns; ++j)
 		{
+			//Print the tile and some spaces
 			cout << map[i][j] << "  ";
 		}
+		//Print the row number again
 		cout << "\b|" << i + 1 << endl;
 	}
+	//Print a new line and some spaces
 	cout << endl << "   ";
+	//Print a line for the bottom of the map
 	for (int i = 0; i < (columns*3)-1; i++) { cout << "_";}
 	cout << endl;
 	cout << "   ";
-	for (int i = 0; i < columns; i++) { if(i<9){cout << i + 1 << "  ";}else{cout << i + 1 << " "; }}
+	//Print the column numbers again
+	for (int i = 0; i < columns; i++) 
+	{ 
+		if(i<9){cout << i + 1 << "  ";
+	}
+	else
+		{
+			cout << i + 1 << " "; 
+		}
+	}
 	cout << endl;
 }
 void deallocateMap(char **map, int rows)
