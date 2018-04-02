@@ -46,17 +46,22 @@ int rng(int max)
 void printReal(int rows, int columns, char **map)
 {
 	//Print array
-	cout << "  ";
-	for (int i = 0; i < columns; i++) { cout << i + 1 << " "; }
+	cout << "   ";
+	for (int i = 0; i < columns; i++) { if(i<9){cout << i + 1 << "  ";}else{cout << i + 1 << " "; }}
+	cout << endl;
 	for (int i = 0; i < rows; ++i)
 	{
 		cout << endl << i + 1 << " ";
+		if(i<9){cout << " ";}
 		for (int j = 0; j < columns; ++j)
 		{
-			cout << map[i][j] << " ";
+			cout << map[i][j] << "  ";
 		}
-		cout << endl;
+		cout << i + 1 << endl;
 	}
+	cout << endl;
+	cout << "   ";
+	for (int i = 0; i < columns; i++) { if(i<9){cout << i + 1 << "  ";}else{cout << i + 1 << " "; }}
 }
 void deallocateMap(char **map, int rows)
 {
