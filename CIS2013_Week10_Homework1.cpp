@@ -12,7 +12,7 @@ char** genMap(int, int);
 bool** genChoices(int, int);
 void deallocateMap(char**, int);
 void deallocateChoices(bool**, int);
-
+char** putMinesOnMap(char**, int, int, int);
 
 int main()
 {
@@ -55,13 +55,18 @@ int main()
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
+	
 	//Generate the map
 	char** map = genMap(rows, columns);
+	map = putMinesOnMap(map, rows, columns, numberOfMines);
+
 	//Generate choices array
 	bool** choices = genChoices(rows, columns);
+	
 	//Print the real map
 	cout << "\t\t\n\n---------" << endl;
 	printReal(rows, columns, map);
+	
 	//Print the view
 	cout << "\t\t\n\n---------\n\n" << endl;
 	printView(rows, columns, map);
@@ -72,8 +77,9 @@ int main()
 	//Get coordinates from user
 	cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
 	choices[x-1][y-1] = true;
+	
 	//Testing choice array
-	for(int i = 0; i < rows; i++)
+	/*for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
@@ -84,13 +90,35 @@ int main()
 			}
 			
 		}
-	}
+	}*/
 
-
+	
+	
 	//Deallocate the arrays
 	deallocateMap(map, rows);
 	deallocateChoices(choices, rows);
 	return 0;
+}
+
+char** putMinesOnMap(char **map, int rows, int columns, int numberOfMines)
+{
+	
+	int mineCounter = 0;
+
+	while(mineCounter != numberOfMines)
+	{
+		int numberOfTiles = rows * columns;
+		int i = rng(rows) - 1;
+		
+		int diceRoll = rng(numberOfTiles) - 1;
+		int j = rng(columns) - 1;
+		if(diceRoll == 0)
+		{
+			map[i][j] = 'M';
+			mineCounter++;
+		}
+	}
+	return map;
 }
 
 //Random number generator used for arrays. Returns from 1 to max number provided as argument
@@ -252,7 +280,7 @@ char** genMap(int rows, int columns)
 		for (int j = 0; j < columns; ++j)
 		{
 			//Blank Tile
-			map[i][j] = (char)176;
+			map[i][j] = ' ';
 		}
 	}
 	return map;
