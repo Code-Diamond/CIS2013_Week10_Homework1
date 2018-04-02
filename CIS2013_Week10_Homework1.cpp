@@ -48,20 +48,25 @@ void printReal(int rows, int columns, char **map)
 	//Print array
 	cout << "   ";
 	for (int i = 0; i < columns; i++) { if(i<9){cout << i + 1 << "  ";}else{cout << i + 1 << " "; }}
-	cout << endl;
+	cout << endl << "   ";
+	for (int i = 0; i < (columns*3)-1; i++) { cout << "_";}
 	for (int i = 0; i < rows; ++i)
 	{
-		cout << endl << i + 1 << " ";
+		cout << endl << i + 1;
 		if(i<9){cout << " ";}
+		cout << "|";
 		for (int j = 0; j < columns; ++j)
 		{
 			cout << map[i][j] << "  ";
 		}
-		cout << i + 1 << endl;
+		cout << "\b|" << i + 1 << endl;
 	}
+	cout << endl << "   ";
+	for (int i = 0; i < (columns*3)-1; i++) { cout << "_";}
 	cout << endl;
 	cout << "   ";
 	for (int i = 0; i < columns; i++) { if(i<9){cout << i + 1 << "  ";}else{cout << i + 1 << " "; }}
+	cout << endl;
 }
 void deallocateMap(char **map, int rows)
 {
@@ -91,7 +96,7 @@ char** genMap(int rows, int columns)
 	{
 		for (int j = 0; j < columns; ++j)
 		{
-			map[i][j] = '.';
+			map[i][j] = (char)176;
 		}
 	}
 	return map;
