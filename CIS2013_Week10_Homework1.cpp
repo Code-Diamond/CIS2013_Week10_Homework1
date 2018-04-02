@@ -62,13 +62,14 @@ int main()
 	//Print the real map
 	cout << "\t\t\n\n---------" << endl;
 	printReal(rows, columns, map);
+	//Print the view
 	cout << "\t\t\n\n---------\n\n" << endl;
 	printView(rows, columns, map);
 	cout << "\t\t\n\n---------\n\n" << endl;
 
 	//Create coordinates
 	int x, y;
-
+	//Get coordinates from user
 	cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
 	choices[x-1][y-1] = true;
 	//Testing choice array
