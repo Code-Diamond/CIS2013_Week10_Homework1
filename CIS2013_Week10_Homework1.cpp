@@ -22,7 +22,7 @@ int main()
 	int rows = -1;
 	int columns = -1;
 	int numberOfMines = -1;
-	bool validate;
+	bool sweptAll = false;
 
 	//Ask user for input until valid entry for rows, columns and the number of mines
 	while(rows <= 0)
@@ -65,6 +65,27 @@ int main()
 	cout << "\t\t\n\n---------\n\n" << endl;
 	printView(rows, columns, map);
 	cout << "\t\t\n\n---------\n\n" << endl;
+
+	//Create coordinates
+	int x, y;
+
+	cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
+	choices[x-1][y-1] = true;
+	//Testing choice array
+	for(int i = 0; i < rows; i++)
+	{
+		for(int j = 0; j < columns; j++)
+		{
+			if(choices[i][j] == true)
+			{
+				//Keeping in mind the coordinates are 1 more than the array iterators
+				cout << i+1 << "," << j+1 << ":" << choices[i][j] << endl; //1 = true
+			}
+			
+		}
+	}
+
+
 	//Deallocate the arrays
 	deallocateMap(map, rows);
 	deallocateChoices(choices, rows);
