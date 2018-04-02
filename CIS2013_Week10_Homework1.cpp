@@ -1,7 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include <cstdlib>
-
+#include <exception>
 using namespace std;
 
 int rng(int);
@@ -13,14 +13,49 @@ int main()
 	//Use time as a seed for the rng
 	srand(time(NULL));
 
-	int rows;
-	int columns;
-	int numberOfMines;
+	int rows = -1;
+	int columns = -1;
+	int numberOfMines = -1;
+	bool validate;
 
 
-	cout << "Enter the number of rows: ", cin >> rows, cout << endl;
-	cout << "Enter the number of columns: ", cin >> columns, cout << endl;
-	cout << "Enter the number of mines: ", cin >> numberOfMines, cout << endl;
+	while(rows <= 0)
+	{
+		cout << "Enter the number of rows: ", cin >> rows, cout << endl;		
+		if(rows == 0)
+		{
+			cout << "Invalid entry, please enter a number.\n\n\a";
+		}
+		cin.clear();
+		cin.ignore(100, '\n');
+	}
+
+
+	while(columns <= 0)
+	{
+		cout << "Enter the number of columns: ", cin >> columns, cout << endl;	
+		if(columns == 0)
+		{
+			cout << "Invalid entry, please enter a number.\n\n\a";
+		}
+		cin.clear();
+		cin.ignore(100, '\n');
+	}
+
+	while(numberOfMines <= 0)
+	{
+		cout << "Enter the number of mines: ", cin >> numberOfMines, cout << endl;		
+		if(numberOfMines == 0)
+		{
+			cout << "Invalid entry, please enter a number.\n\n\a";
+		}
+		cin.clear();
+		cin.ignore(100, '\n');
+	}
+	
+	
+
+	
 
 	//cout << rng(numberOfMines);
 
@@ -32,7 +67,6 @@ int main()
 	//int diceRoll;
 	//diceRoll = rng(rows * columns);
 	deallocateMap(map, rows);
-
 	return 0;
 }
 
