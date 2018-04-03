@@ -31,13 +31,16 @@ bool sweptAll = false;
 
 int main()
 {
+	for(int i = 0; i < 50; i++){cout << "\n";}
+	cout << "Welcome to Console Minesweeper.\nTo Begin please tell me how many rows and columns you'd like the map.\n   \n";
+
 	//Use time as a seed for the rng
 	srand(time(NULL));
 
 	//Ask user for input until valid entry for rows, columns and the number of mines
 	while(rows <= 0)
 	{
-		cout << "Enter the number of rows: ", cin >> rows, cout << endl;		
+		cout << "Enter the number of rows: ", cin >> rows;		
 		if(rows == 0)
 		{
 			cout << "Invalid entry, please enter a whole number greater than 0.\n\n\a";
@@ -52,7 +55,7 @@ int main()
 	}
 	while(columns <= 0)
 	{
-		cout << "Enter the number of columns: ", cin >> columns, cout << endl;	
+		cout << "Enter the number of columns: ", cin >> columns;	
 		if(columns == 0)
 		{
 			cout << "Invalid entry, please enter a whole number greater than 0.\n\n\a";
@@ -91,16 +94,38 @@ int main()
 	while(!sweptAll)
 	{
 
-		//Print the real map
-		printReal(rows, columns, map);
-		cout << "\n";
+		//Enable for testing
+			//printReal(rows, columns, map);
+			//cout << "\n";
+
+		//Reset x and y
+		x = -1;
+		y = -1;
+		
 		//Print the view
 		printView(rows, columns, view);
-
-		//Create coordinates
-		int x, y;
+		
 		//Get coordinates from user
-		cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
+		while(x <= 0)
+		{
+			cout << "\nEnter a row and column to sweep.\nRow: ", cin >> x; 	
+			if(x == 0)
+			{
+				cout << "Invalid entry, please enter a whole number greater than 0.\n\n";
+			}
+			cin.clear();
+			cin.ignore(100, '\n');
+		}
+		while(y <= 0)
+		{
+			cout << "Column: ", cin >> y; 	
+			if(y == 0)
+			{
+				cout << "Invalid entry, please enter a whole number greater than 0.\n\n";
+			}
+			cin.clear();
+			cin.ignore(100, '\n');
+		}
 
 		if(choices[x-1][y-1] == true)
 		{
@@ -132,14 +157,14 @@ void checkTileForMine(char** map, char** view, int x, int y, int rows, int colum
 {
 	if(map[x][y] == 'X')
 	{
-		cout << "You hit a mine." << endl;
+		cout << "\a\nYou hit a mine!" << endl;
 		printReal(rows, columns, map, x, y);
-		cout << "YOU ARE DEAD!";		
+		cout << "\nYOU ARE DEAD!\n";		
 		exit(1);
 	}
 	else
 	{
-		cout << "You swept the tile, and found no mines." << endl;
+		cout << "\nYou swept the tile, and found no mines.\n" << endl;
 		view[x][y] = ' ';
 		numberOfSweptSpaces++;
 		//Display map if winner
