@@ -13,6 +13,7 @@ char** genView(int, int);
 bool** genChoices(int, int);
 void deallocateMap(char**, int);
 void deallocateChoices(bool**, int);
+void deallocateView(char**, int);
 char** putMinesOnMap(char**, int, int, int);
 void checkTileForMine(char** map, char** view, int x, int y);
 
@@ -119,6 +120,7 @@ int main()
 	//Deallocate the arrays
 	deallocateMap(map, rows);
 	deallocateChoices(choices, rows);
+	deallocateView(view, rows);
 	return 0;
 }
 
@@ -311,6 +313,19 @@ void deallocateChoices(bool **choices, int rows)
 		//Just do nothing
 	}	
 }
+//Deallocates the choices array
+void deallocateView(bool **view, int rows)
+{
+	try
+	{
+		delete[] view;
+	}
+	catch(exception e)
+	{
+		//Just do nothing
+	}	
+}
+
 //Generates the map array
 char** genMap(int rows, int columns)
 {
