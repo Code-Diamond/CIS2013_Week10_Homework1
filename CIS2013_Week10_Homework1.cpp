@@ -7,6 +7,7 @@ using namespace std;
 //Function declarations
 int rng(int);
 void printReal(int, int, char**);
+void printReal(int, int, char**, int, int);
 void printView(int, int, char**);
 char** genMap(int, int);
 char** genView(int, int);
@@ -15,20 +16,23 @@ void deallocateMap(char**, int);
 void deallocateChoices(bool**, int);
 void deallocateView(char**, int);
 char** putMinesOnMap(char**, int, int, int);
-void checkTileForMine(char** map, char** view, int x, int y);
+void checkTileForMine(char** map, char** view, int, int, int, int);
+
 
 //Global variables
+int x = -1;
+int y = -1;
 int numberOfSweptSpaces=0;
 int numberOfEmptySpaces=0;
+int rows = -1;
+int columns = -1;
+int numberOfMines = -1;
+bool sweptAll = false;
+
 int main()
 {
 	//Use time as a seed for the rng
 	srand(time(NULL));
-
-	int rows = -1;
-	int columns = -1;
-	int numberOfMines = -1;
-	bool sweptAll = false;
 
 	//Ask user for input until valid entry for rows, columns and the number of mines
 	while(rows <= 0)
@@ -36,7 +40,7 @@ int main()
 		cout << "Enter the number of rows: ", cin >> rows, cout << endl;		
 		if(rows == 0)
 		{
-			cout << "Invalid entry, please enter a number.\n\n\a";
+			cout << "Invalid entry, please enter a whole number greater than 0.\n\n\a";
 		}
 		if(rows > 22)
 		{
@@ -51,7 +55,7 @@ int main()
 		cout << "Enter the number of columns: ", cin >> columns, cout << endl;	
 		if(columns == 0)
 		{
-			cout << "Invalid entry, please enter a number.\n\n\a";
+			cout << "Invalid entry, please enter a whole number greater than 0.\n\n\a";
 		}
 		cin.clear();
 		cin.ignore(100, '\n');
@@ -61,7 +65,7 @@ int main()
 		cout << "Enter the number of mines: ", cin >> numberOfMines, cout << endl;		
 		if(numberOfMines == 0)
 		{
-			cout << "Invalid entry, please enter a number.\n\n\a";
+			cout << "Invalid entry, please enter a whole number greater than 0.\n\n\a";
 		}
 		int numOfTiles = (rows * columns);
 		if(numberOfMines > numOfTiles)
@@ -104,7 +108,7 @@ int main()
 		}
 		else
 		{
-			checkTileForMine(map, view, x-1, y-1);	
+			checkTileForMine(map, view, x-1, y-1, rows, columns);	
 			choices[x-1][y-1] = true;
 		}
 
@@ -114,8 +118,8 @@ int main()
 		}
 	}
 
+
 	cout << "\nCONGRATS YOU WIN!\n";
-	//Print Real Map
 	
 	//Deallocate the arrays
 	deallocateMap(map, rows);
@@ -124,20 +128,25 @@ int main()
 	return 0;
 }
 
-void checkTileForMine(char** map, char** view, int x, int y)
+void checkTileForMine(char** map, char** view, int x, int y, int rows, int columns)
 {
-	if(map[x][y] == 'M')
+	if(map[x][y] == 'X')
 	{
 		cout << "You hit a mine." << endl;
-		//printReal
-		//end the game
+		printReal(rows, columns, map, x, y);
+		cout << "YOU ARE DEAD!";		
+		exit(1);
 	}
 	else
 	{
 		cout << "You swept the tile, and found no mines." << endl;
 		view[x][y] = ' ';
 		numberOfSweptSpaces++;
-
+		//Display map if winner
+		if(numberOfSweptSpaces == numberOfEmptySpaces)
+		{
+			printReal(rows,columns,map,x,y);
+		}
 
 	}
 }
@@ -154,9 +163,9 @@ char** putMinesOnMap(char **map, int rows, int columns, int numberOfMines)
 		
 		int diceRoll = rng(numberOfTiles) - 1;
 		int j = rng(columns) - 1;
-		if(diceRoll == 0 && map[i][j] != 'M')
+		if(diceRoll == 0 && map[i][j] != 'X')
 		{
-			map[i][j] = 'M';
+			map[i][j] = 'X';
 			mineCounter++;
 		}
 	}
@@ -289,6 +298,68 @@ void printReal(int rows, int columns, char **map)
 	}
 	cout << endl;
 }
+
+//Overloaded Function that prints map
+void printReal(int rows, int columns, char **map, int x, int y)
+{
+	map[x][y] = '@';
+	//Spacing
+	cout << "     ";
+	for (int i = 0; i < columns; i++) 
+	{
+		//Print the column number
+		if(i<9)
+		{
+			cout << i + 1 << "  ";
+		}else
+		{
+			cout << i + 1 << " "; 
+		}
+	}
+	//Spacing
+	cout << endl;
+	cout << "    ";
+	//Print a line for the top of the map
+	for (int i = 0; i < (columns*3)+1; i++) 
+	{ 
+		cout << "-";
+	}
+	cout << endl;
+
+	//Print each map row
+	for (int i = 0; i < rows; ++i)
+	{
+		//Print the row number
+		cout << endl << i + 1;
+		if(i<9){cout << " ";}
+		cout << "|  ";
+		for (int j = 0; j < columns; ++j)
+		{
+			cout << map[i][j] << "  ";	
+		}
+		//Print the row number again
+		cout << "\b | " << i + 1 << endl;
+	}
+	//Print a new line and some spaces
+	cout << endl;
+	cout << "    ";
+	//Print a line for the bottom of the map
+	for (int i = 0; i < (columns*3)+1; i++) { cout << "-";}
+	cout << endl;
+	cout << "     ";
+	//Print the column numbers again
+	for (int i = 0; i < columns; i++) 
+	{ 
+		if(i<9){cout << i + 1 << "  ";
+	}
+	else
+		{
+			cout << i + 1 << " "; 
+		}
+	}
+	cout << endl;
+}
+
 //Deallocates the map array
 void deallocateMap(char **map, int rows)
 {
@@ -314,7 +385,7 @@ void deallocateChoices(bool **choices, int rows)
 	}	
 }
 //Deallocates the choices array
-void deallocateView(bool **view, int rows)
+void deallocateView(char **view, int rows)
 {
 	try
 	{
