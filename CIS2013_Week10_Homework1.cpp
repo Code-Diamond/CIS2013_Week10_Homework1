@@ -93,11 +93,11 @@ int main()
 
 	while(!sweptAll)
 	{
-
-		//Enable for testing
+		//Enable for testing-------------------------v
 			//printReal(rows, columns, map);
 			//cout << "\n";
-
+		//-------------------------------------------^
+		
 		//Reset x and y
 		x = -1;
 		y = -1;
@@ -126,23 +126,23 @@ int main()
 			cin.clear();
 			cin.ignore(100, '\n');
 		}
-
+		//Check if tile was already swept
 		if(choices[x-1][y-1] == true)
 		{
 			cout << "You already swept this tile." << endl;
 		}
 		else
 		{
+			//Check if it has a mine and update choices array
 			checkTileForMine(map, view, x-1, y-1, rows, columns);	
 			choices[x-1][y-1] = true;
 		}
-
+		//They have won the game if they swept every space
 		if(numberOfSweptSpaces == numberOfEmptySpaces)
 		{
 			sweptAll = !sweptAll;
 		}
 	}
-
 
 	cout << "\nCONGRATS YOU WIN!\n";
 	
@@ -152,9 +152,10 @@ int main()
 	deallocateView(view, rows);
 	return 0;
 }
-
+//Check if the tile has a mine
 void checkTileForMine(char** map, char** view, int x, int y, int rows, int columns)
 {
+	//Mines denoted by X
 	if(map[x][y] == 'X')
 	{
 		cout << "\a\nYou hit a mine!" << endl;
@@ -164,6 +165,7 @@ void checkTileForMine(char** map, char** view, int x, int y, int rows, int colum
 	}
 	else
 	{
+		//Update the view and swept counter
 		cout << "\nYou swept the tile, and found no mines.\n" << endl;
 		view[x][y] = ' ';
 		numberOfSweptSpaces++;
@@ -172,24 +174,26 @@ void checkTileForMine(char** map, char** view, int x, int y, int rows, int colum
 		{
 			printReal(rows,columns,map,x,y);
 		}
-
 	}
 }
-
+//Puts mines on the map
 char** putMinesOnMap(char **map, int rows, int columns, int numberOfMines)
 {
-	
+	//Create mine counter
 	int mineCounter = 0;
-
+	//Loop until counter reaches the numberOfMines designated by the user
 	while(mineCounter != numberOfMines)
 	{
-		int numberOfTiles = rows * columns;
+		//Randomly generate mines throughout the map
 		int i = rng(rows) - 1;
-		
-		int diceRoll = rng(numberOfTiles) - 1;
 		int j = rng(columns) - 1;
+		
+		int numberOfTiles = rows * columns;
+		int diceRoll = rng(numberOfTiles) - 1;
+		//Check to see if the roll was lucky enough and if the tile isnt already a mine
 		if(diceRoll == 0 && map[i][j] != 'X')
 		{
+			//Update the map and counter
 			map[i][j] = 'X';
 			mineCounter++;
 		}
@@ -203,8 +207,8 @@ int rng(int max)
 	int randomN = 1 + rand() % max;
 	return randomN;
 }
+
 //Prints the view for the user
-//TODO update view
 void printView(int rows, int columns, char**view)
 {
 	//Spacing
@@ -324,7 +328,7 @@ void printReal(int rows, int columns, char **map)
 	cout << endl;
 }
 
-//Overloaded Function that prints map
+//Overloading function that prints real map
 void printReal(int rows, int columns, char **map, int x, int y)
 {
 	map[x][y] = '@';
@@ -394,7 +398,6 @@ void deallocateMap(char **map, int rows)
 	}
 	catch(exception e)
 	{
-		//Just do nothing
 	}	
 }
 //Deallocates the choices array
@@ -406,7 +409,6 @@ void deallocateChoices(bool **choices, int rows)
 	}
 	catch(exception e)
 	{
-		//Just do nothing
 	}	
 }
 //Deallocates the choices array
@@ -418,7 +420,6 @@ void deallocateView(char **view, int rows)
 	}
 	catch(exception e)
 	{
-		//Just do nothing
 	}	
 }
 
