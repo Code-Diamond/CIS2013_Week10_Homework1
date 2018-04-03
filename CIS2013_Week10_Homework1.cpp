@@ -13,6 +13,7 @@ bool** genChoices(int, int);
 void deallocateMap(char**, int);
 void deallocateChoices(bool**, int);
 char** putMinesOnMap(char**, int, int, int);
+void checkTileForMine(char** map, int x, int y);
 
 int main()
 {
@@ -75,6 +76,7 @@ int main()
 	cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
 	choices[x-1][y-1] = true;
 	
+	checkTileForMine(map, x-1, y-1);
 	//Testing choice array
 	/*for(int i = 0; i < rows; i++)
 	{
@@ -95,6 +97,14 @@ int main()
 	deallocateMap(map, rows);
 	deallocateChoices(choices, rows);
 	return 0;
+}
+
+void checkTileForMine(char** map, int x, int y)
+{
+	if(map[x][y] == 'M')
+	{
+		cout << "You hit a mine." << endl;
+	}
 }
 
 char** putMinesOnMap(char **map, int rows, int columns, int numberOfMines)
