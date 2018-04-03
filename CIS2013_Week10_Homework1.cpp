@@ -15,6 +15,9 @@ void deallocateChoices(bool**, int);
 char** putMinesOnMap(char**, int, int, int);
 void checkTileForMine(char** map, int x, int y);
 
+//Global variables
+int numberOfSweptSpaces=0;
+int numberOfEmptySpaces=0;
 int main()
 {
 	//Use time as a seed for the rng
@@ -56,7 +59,7 @@ int main()
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
-	
+	numberOfEmptySpaces = ((rows*columns) - numberOfMines);
 	//Generate the map
 	char** map = genMap(rows, columns);
 	map = putMinesOnMap(map, rows, columns, numberOfMines);
@@ -64,19 +67,39 @@ int main()
 	//Generate choices array
 	bool** choices = genChoices(rows, columns);
 	
-	//Print the real map
-	printReal(rows, columns, map);
-	cout << "\n";
-	//Print the view
-	printView(rows, columns, map);
 
-	//Create coordinates
-	int x, y;
-	//Get coordinates from user
-	cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
-	choices[x-1][y-1] = true;
+	while(!sweptAll)
+	{
+
+		//Print the real map
+		printReal(rows, columns, map);
+		cout << "\n";
+		//Print the view
+		printView(rows, columns, map);
+
+		//Create coordinates
+		int x, y;
+		//Get coordinates from user
+		cout << "Enter a row and column to sweep.\nRow:", cin >> x; cout << "\nColumn:", cin >> y;
+
+		if(choices[x-1][y-1] == true)
+		{
+			cout << "You already swept this tile." << endl;
+		}
+		else
+		{
+			checkTileForMine(map, x-1, y-1);	
+			choices[x-1][y-1] = true;
+		}
+
+		if(numberOfSweptSpaces == numberOfEmptySpaces)
+		{
+			sweptAll = !sweptAll;
+		}
+	}
+
+	cout << "\nCONGRATS YOU WIN!\n";
 	
-	checkTileForMine(map, x-1, y-1);
 	//Testing choice array
 	/*for(int i = 0; i < rows; i++)
 	{
@@ -104,6 +127,13 @@ void checkTileForMine(char** map, int x, int y)
 	if(map[x][y] == 'M')
 	{
 		cout << "You hit a mine." << endl;
+		//printReal
+	}
+	else
+	{
+		cout << "You swept the tile, and found no mines." << endl;
+		numberOfSweptSpaces++;
+
 	}
 }
 
