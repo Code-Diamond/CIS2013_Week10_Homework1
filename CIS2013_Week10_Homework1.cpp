@@ -9,12 +9,12 @@ int rng(int);
 void printReal(int, int, char**);
 void printView(int, int, char**);
 char** genMap(int, int);
-//char** genView(int, int);
+char** genView(int, int);
 bool** genChoices(int, int);
 void deallocateMap(char**, int);
 void deallocateChoices(bool**, int);
 char** putMinesOnMap(char**, int, int, int);
-void checkTileForMine(char** map, int x, int y);
+void checkTileForMine(char** map, char** view, int x, int y);
 
 //Global variables
 int numberOfSweptSpaces=0;
@@ -62,7 +62,8 @@ int main()
 		{
 			cout << "Invalid entry, please enter a number.\n\n\a";
 		}
-		if(numberOfMines > (rows * columns))
+		int numOfTiles = (rows * columns);
+		if(numberOfMines > numOfTiles)
 		{
 			cout << "You cannot have more mines then there are tiles in the game." << endl;
 			numberOfMines = -1;
@@ -76,6 +77,7 @@ int main()
 	map = putMinesOnMap(map, rows, columns, numberOfMines);
 
 	//Generate the view array
+	char** view = genView(rows, columns);
 
 	//Generate choices array
 	bool** choices = genChoices(rows, columns);
@@ -88,7 +90,7 @@ int main()
 		printReal(rows, columns, map);
 		cout << "\n";
 		//Print the view
-		printView(rows, columns, map);
+		printView(rows, columns, view);
 
 		//Create coordinates
 		int x, y;
@@ -101,7 +103,7 @@ int main()
 		}
 		else
 		{
-			checkTileForMine(map, x-1, y-1);	
+			checkTileForMine(map, view, x-1, y-1);	
 			choices[x-1][y-1] = true;
 		}
 
@@ -112,7 +114,7 @@ int main()
 	}
 
 	cout << "\nCONGRATS YOU WIN!\n";
-	
+	//Print Real Map
 	
 	//Deallocate the arrays
 	deallocateMap(map, rows);
@@ -120,7 +122,7 @@ int main()
 	return 0;
 }
 
-void checkTileForMine(char** map, int x, int y)
+void checkTileForMine(char** map, char** view, int x, int y)
 {
 	if(map[x][y] == 'M')
 	{
@@ -131,8 +133,9 @@ void checkTileForMine(char** map, int x, int y)
 	else
 	{
 		cout << "You swept the tile, and found no mines." << endl;
-		//Update view
+		view[x][y] = ' ';
 		numberOfSweptSpaces++;
+
 
 	}
 }
@@ -166,7 +169,7 @@ int rng(int max)
 }
 //Prints the view for the user
 //TODO update view
-void printView(int rows, int columns, char**map)
+void printView(int rows, int columns, char**view)
 {
 	//Spacing
 	cout << "     ";
@@ -184,13 +187,13 @@ void printView(int rows, int columns, char**map)
 	//Spacing
 	cout << endl;
 	cout << "    ";
-	//Print a line for the top of the map
+	//Print a line for the top of the view
 	for (int i = 0; i < (columns*3)+1; i++) 
 	{ 
 		cout << "-";
 	}
 	cout << endl;
-	//Print each map row
+	//Print each view row
 	for (int i = 0; i < rows; ++i)
 	{
 		//Print the row number
@@ -200,7 +203,7 @@ void printView(int rows, int columns, char**map)
 		for (int j = 0; j < columns; ++j)
 		{
 			//Print the tile and some spaces
-			cout << '?' << "  ";
+			cout << view[i][j] << "  ";
 		}
 		//Print the row number again
 		cout << "\b | " << i + 1 << endl;
@@ -208,7 +211,7 @@ void printView(int rows, int columns, char**map)
 	//Print a new line and some spaces
 	cout << endl;
 	cout << "    ";
-	//Print a line for the bottom of the map
+	//Print a line for the bottom of the view
 	for (int i = 0; i < (columns*3)+1; i++) { cout << "-";}
 	cout << endl;
 	cout << "     ";
@@ -323,12 +326,35 @@ char** genMap(int rows, int columns)
 	{
 		for (int j = 0; j < columns; ++j)
 		{
-			//Blank Tile
+			//Blank or Clear Tile
 			map[i][j] = ' ';
 		}
 	}
 	return map;
 }
+
+//Generates the view array
+char** genView(int rows, int columns)
+{
+	//Allocate a two dimensional row x column array
+	char** view = new char*[rows];
+	for (int i = 0; i < rows; ++i)
+	{
+		view[i] = new char[columns];
+	}
+
+	//Fill array with Unchosen Tiles
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < columns; ++j)
+		{
+			//Unchosen Tile
+			view[i][j] = '+';
+		}
+	}
+	return view;
+}
+
 //Generates the choices array
 bool** genChoices(int rows, int columns)
 {
