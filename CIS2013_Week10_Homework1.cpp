@@ -9,6 +9,7 @@ int rng(int);
 void printReal(int, int, char**);
 void printView(int, int, char**);
 char** genMap(int, int);
+//char** genView(int, int);
 bool** genChoices(int, int);
 void deallocateMap(char**, int);
 void deallocateChoices(bool**, int);
@@ -36,6 +37,11 @@ int main()
 		{
 			cout << "Invalid entry, please enter a number.\n\n\a";
 		}
+		if(rows > 22)
+		{
+			cout << "The maximum supported rows is currently 22." << endl;
+			rows = -1;
+		}
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
@@ -56,6 +62,11 @@ int main()
 		{
 			cout << "Invalid entry, please enter a number.\n\n\a";
 		}
+		if(numberOfMines > (rows * columns))
+		{
+			cout << "You cannot have more mines then there are tiles in the game." << endl;
+			numberOfMines = -1;
+		}
 		cin.clear();
 		cin.ignore(100, '\n');
 	}
@@ -63,6 +74,8 @@ int main()
 	//Generate the map
 	char** map = genMap(rows, columns);
 	map = putMinesOnMap(map, rows, columns, numberOfMines);
+
+	//Generate the view array
 
 	//Generate choices array
 	bool** choices = genChoices(rows, columns);
@@ -100,21 +113,6 @@ int main()
 
 	cout << "\nCONGRATS YOU WIN!\n";
 	
-	//Testing choice array
-	/*for(int i = 0; i < rows; i++)
-	{
-		for(int j = 0; j < columns; j++)
-		{
-			if(choices[i][j] == true)
-			{
-				//Keeping in mind the coordinates are 1 more than the array iterators
-				cout << i+1 << "," << j+1 << ":" << choices[i][j] << endl; //1 = true
-			}
-			
-		}
-	}*/
-
-	
 	
 	//Deallocate the arrays
 	deallocateMap(map, rows);
@@ -128,10 +126,12 @@ void checkTileForMine(char** map, int x, int y)
 	{
 		cout << "You hit a mine." << endl;
 		//printReal
+		//end the game
 	}
 	else
 	{
 		cout << "You swept the tile, and found no mines." << endl;
+		//Update view
 		numberOfSweptSpaces++;
 
 	}
@@ -165,6 +165,7 @@ int rng(int max)
 	return randomN;
 }
 //Prints the view for the user
+//TODO update view
 void printView(int rows, int columns, char**map)
 {
 	//Spacing
